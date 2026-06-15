@@ -30,28 +30,4 @@ export const Shell = {
             await shell.open(url)
         }
     },
-
-    /**
-     * Extract a zip file to destination directory.
-     * @param zipPath Absolute path to zip file.
-     * @param destDir Absolute path to destination directory.
-     */
-    async extractZip(zipPath: string, destDir: string) {
-        await invoke('plugin:shell|extract_zip', {
-            zipPath,
-            destDir
-        })
-    },
-
-    /**
-     * Copy a file to destination path.
-     * @param src Absolute path to source file.
-     * @param dest Absolute path to destination file.
-     */
-    async copyFile(src: string, dest: string) {
-        await invoke('plugin:shell|copy_file', {
-            src,
-            dest
-        })
-    }
 }

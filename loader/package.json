@@ -13,7 +13,7 @@
   "dependencies": {
     "@std/ini": "npm:@jsr/std__ini@^0.225",
     "@std/yaml": "npm:@jsr/std__yaml@^1.0.2",
-    "@tauri-apps/api": "^1.6.0",
+    "@tauri-apps/api": "^1",
     "class-variance-authority": "^0.7.0",
     "js-yaml": "^4.1.0",
     "solid-js": "^1.7.8",

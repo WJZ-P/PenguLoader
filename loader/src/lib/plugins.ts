@@ -19,16 +19,16 @@ export const PluginManager = new class {
 
   private disabledSet = new Set<number>()
 
-  async getDir() {
+  private getDir() {
     let path = Config.get('app', 'plugins_dir', '')
     if (!path || path.startsWith('.')) {
-      path = await Config.basePath('plugins')
+      path = Config.basePath('plugins')
     }
-    return path as string
+    return path
   }
 
   async openFolder() {
-    const dir = await this.getDir()
+    const dir = this.getDir()
     if (!await exists(dir)) {
       await createDir(dir, {
         recursive: true
@@ -41,7 +41,7 @@ export const PluginManager = new class {
    * Get all plugins.
    */
   async getPlugins() {
-    const dir = await this.getDir()
+    const dir = this.getDir()
     const plugins = Array<PluginInfo>()
 
     this.disabledSet = this.fetchDisabledSet()

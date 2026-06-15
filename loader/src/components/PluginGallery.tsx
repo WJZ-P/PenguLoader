@@ -1,7 +1,5 @@
-import { Component, For, createSignal, onMount, Switch, Match, Show, createEffect, onCleanup } from 'solid-js'
-import { listen } from '@tauri-apps/api/event'
+import { Component, For, createSignal, onMount, Switch, Match, Show, createEffect } from 'solid-js'
 import { type PluginInfo, PluginManager } from '../lib/plugins'
-import { Shell } from '../lib/shell'
 import { LoaderIcon, ReloadIcon, StoreIcon } from './Icons'
 import { Checkbox } from './ui'
 import { useConfig } from '~/lib/config'
@@ -60,40 +58,7 @@ export const PluginGallery: Component = () => {
       .finally(() => setLoading(false))
   }
 
-  onMount(async () => {
-    reload()
-
-    const unlisten = await listen('tauri://file-drop', async (event) => {
-      const paths = event.payload as string[]
-      if (paths && paths.length > 0) {
-        for (const path of paths) {
-          if (path.endsWith('.zip')) {
-            try {
-              const fileName = path.split(/[\\/]/).pop()?.replace(/\.zip$/i, '') || 'plugin'
-              const destDir = await PluginManager.getDir() + '/' + fileName
-              await Shell.extractZip(path, destDir)
-              reload()
-            } catch (err) {
-              console.error('Failed to extract zip:', err)
-            }
-          } else if (path.endsWith('.js')) {
-            try {
-              const fileName = path.split(/[\\/]/).pop() || 'plugin.js'
-              const destDir = await PluginManager.getDir()
-              await Shell.copyFile(path, destDir + '/' + fileName)
-              reload()
-            } catch (err) {
-              console.error('Failed to copy js:', err)
-            }
-          }
-        }
-      }
-    })
-
-    onCleanup(() => {
-      unlisten()
-    })
-  })
+  onMount(reload)
   createEffect(() => {
     // watch the dir changes
     config.app.plugins_dir()

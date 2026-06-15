@@ -10,11 +10,6 @@
     "version": "1.2.0"
   },
   "tauri": {
-    "windows": [
-      {
-        "fileDropEnabled": true
-      }
-    ],
     "allowlist": {
       "all": false,
       "dialog": {

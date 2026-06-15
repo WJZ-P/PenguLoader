@@ -26,7 +26,7 @@ pub fn build_window<R: tauri::Runtime>(app: &tauri::App<R>) -> tauri::Window<R> 
     match tauri::WindowBuilder::new(app, "main", tauri::WindowUrl::default())
         .title("Pengu Loader")
         .inner_size(940.0, 560.0)
-        // .disable_file_drop_handler()
+        .disable_file_drop_handler()
         .resizable(false)
         .maximizable(false)
         .center()
