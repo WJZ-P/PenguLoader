@@ -1,8 +1,28 @@
 use std::process::Command;
+use std::fs::File;
+use std::io;
+use std::path::Path;
+use zip::ZipArchive;
 use tauri::{
     plugin::{Builder, TauriPlugin},
     Runtime,
 };
+
+#[tauri::command]
+fn extract_zip(zip_path: &str, dest_dir: &str) -> Result<(), String> {
+    let file = File::open(zip_path).map_err(|e| e.to_string())?;
+    let mut archive = ZipArchive::new(file).map_err(|e| e.to_string())?;
+    
+    archive.extract(dest_dir).map_err(|e| e.to_string())?;
+    
+    Ok(())
+}
+
+#[tauri::command]
+fn copy_file(src: &str, dest: &str) -> Result<(), String> {
+    std::fs::copy(src, dest).map_err(|e| e.to_string())?;
+    Ok(())
+}
 
 #[tauri::command]
 fn expand_folder(path: &str) {
@@ -36,6 +56,6 @@ fn reveal_file(path: &str) {
 
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
     Builder::new("shell")
-        .invoke_handler(tauri::generate_handler![expand_folder, reveal_file,])
+        .invoke_handler(tauri::generate_handler![expand_folder, reveal_file, extract_zip, copy_file])
         .build()
 }
